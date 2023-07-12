@@ -1,0 +1,26 @@
+.Navbar-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1.5rem 6rem;
+}
+
+.logo {
+   font-weight: 600;
+   display: flex;
+   align-items: center;
+   font-size: 40px;
+}
+
+@media screen and (max-width: 1050px) {
+    .Navbar-main {
+
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .Navbar-main {
+
+    }
+}
