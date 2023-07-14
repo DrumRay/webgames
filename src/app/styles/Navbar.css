@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
 
-    padding: 1.5rem 6rem;
+    padding: 1.5rem 1rem;
 }
 
 .logo {
@@ -11,16 +11,116 @@
    display: flex;
    align-items: center;
    font-size: 40px;
+   padding-left: 3rem;
+   margin-bottom: 0.5rem;
+}
+
+.logo:hover {
+    cursor: pointer;
+}
+
+.links_container {
+    display: flex;
+    justify-content: left;
+    flex: 1;
+    padding-left: 4rem;
+    gap: 3rem;
+}
+
+.webgame_link {
+    transition: 0.3s ease;
+}
+
+.webgame_link:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: right;
+    gap: 0.5rem;
+    padding-right: 1rem;
+
+
+}
+
+.social-icon {
+    transition: 0.3s ease;
+    }
+    
+.social-icon:hover {
+    transform: scale(1.2);
+    cursor: pointer;
 }
 
 @media screen and (max-width: 1050px) {
     .Navbar-main {
-
+        padding: 1.5rem 0.5rem;
+    }
+    .logo {
+        font-size: 30px;
+        padding-left: 1.5rem;
+    }
+    .links_container {
+        font-size: 20px;
+    }
+    .social-icons {
+        gap: 0.2rem;
+    }
+    .social-icon {
+        scale: 0.8;
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .Navbar-main {
+        padding: 1.5rem 0.5rem;
+        align-items: flex-start;
+    }
+    .logo {
+        font-size: 20px;
+        padding-left: 1rem;
+        margin-bottom: 0rem;
+    }
+    .links_container {
+        font-size: 15px;
+        padding-left: 1.5rem;
+    }
+    .social-icons {
+        gap: 0;
+        padding-left: 0.5rem;
+        padding-right: 0rem;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .social-icon {
+        scale: 0.5;
+    }
+}
 
+@media screen and (max-width: 550px) {
+    .Navbar-main {
+        padding: 1.5rem 0.5rem;
+        align-items: flex-start;
+    }
+    .logo {
+        font-size: 18px;
+        padding-left: 1rem;
+        margin-bottom: 0rem;
+    }
+    .links_container {
+        font-size: 15px;
+        padding-left: 1.5rem;
+    }
+    .social-icons {
+        gap: 0;
+        padding-left: 0.5rem;
+        padding-right: 0rem;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .social-icon {
+        scale: 0.5;
     }
 }

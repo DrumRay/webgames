@@ -24,6 +24,7 @@ body {
   background-blend-mode: darken;
 }
 
+
 .gradient_text {
   background: var(--gradient-text);
   background-clip: text;
