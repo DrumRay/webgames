@@ -2,7 +2,6 @@ import "../styles/Navbar.css";
 import { GrGamepad } from "react-icons/gr";
 import Link from "next/link";
 import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
-import { DiCssdeck } from 'react-icons/di';
 import { TbSquareRoundedLetterR } from 'react-icons/tb';
 
 export default function Navbar() {
@@ -12,6 +11,7 @@ export default function Navbar() {
                 <GrGamepad className="lg:scale-150 lg:mr-4 lg:mb-3 md:scale-110 md:mr-2 md:mb-1.5 sm:scale-85 sm:mr-1.5 sm:mb-1 "/>
                 <a className="gradient_text">Webgames</a>
             </Link>
+            {/* <div className="all_games">All Games</div> */}
             <div className="links_container">
                 <Link href="/tic-tac-toe" className="webgame_link">
                 Tic Tac Toe
