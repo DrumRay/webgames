@@ -2,17 +2,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 1.5rem 1rem;
 }
 
 .logo {
-   font-weight: 600;
-   display: flex;
-   align-items: center;
-   font-size: 40px;
-   padding-left: 3rem;
-   margin-bottom: 0.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    padding-left: 3rem;
+    margin-bottom: 0.5rem;
 }
 
 .logo:hover {
@@ -41,18 +40,132 @@
     justify-content: right;
     gap: 0.5rem;
     padding-right: 1rem;
-
-
 }
 
 .social-icon {
     transition: 0.3s ease;
-    }
-    
+}
+
 .social-icon:hover {
     transform: scale(1.2);
     cursor: pointer;
 }
+
+.all_games {
+    position: relative;
+    display: none;
+    font-size: 20px;
+    justify-content: left;
+    flex: 1;
+    padding-left: 2rem;
+    padding-top: 3px;
+}
+
+.all_games_button {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.all_games_button:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.all_games_links_container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: flex;
+    font-size: 18px;
+    padding: 1rem;
+    z-index: 1;
+    flex-direction: column;
+    opacity: 0;
+}
+
+.all_games_links_container p {
+    transition: transform 0.3s ease;
+}
+
+.all_games_links_container p:hover {
+    transform: scale(1.2);
+}
+
+.swing-in-top-fwd {
+	-webkit-animation: swing-in-top-fwd 1s ease-in-out both;
+	        animation: swing-in-top-fwd 1s ease-in-out both;
+}
+
+@-webkit-keyframes swing-in-top-fwd {
+    0% {
+      -webkit-transform: rotateX(-100deg);
+              transform: rotateX(-100deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotateX(0deg);
+              transform: rotateX(0deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 1;
+    }
+  }
+  @keyframes swing-in-top-fwd {
+    0% {
+      -webkit-transform: rotateX(-100deg);
+              transform: rotateX(-100deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotateX(0deg);
+              transform: rotateX(0deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 1;
+    }
+  }
+  
+  .swing-out-top-fwd {
+	-webkit-animation: swing-out-top-fwd 1s ease-in-out reverse both;
+	        animation: swing-out-top-fwd 1s ease-in-out reverse both;
+}
+
+@-webkit-keyframes swing-out-top-fwd {
+    0% {
+      -webkit-transform: rotateX(-100deg);
+              transform: rotateX(-100deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotateX(0deg);
+              transform: rotateX(0deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 1;
+    }
+  }
+  @keyframes swing-out-top-fwd {
+    0% {
+      -webkit-transform: rotateX(-100deg);
+              transform: rotateX(-100deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotateX(0deg);
+              transform: rotateX(0deg);
+      -webkit-transform-origin: top;
+              transform-origin: top;
+      opacity: 1;
+    }
+  }
 
 @media screen and (max-width: 1050px) {
     .Navbar-main {
@@ -79,13 +192,14 @@
         align-items: flex-start;
     }
     .logo {
-        font-size: 20px;
+        font-size: 22px;
         padding-left: 1rem;
         margin-bottom: 0rem;
     }
     .links_container {
         font-size: 15px;
         padding-left: 1.5rem;
+        display: none;
     }
     .social-icons {
         gap: 0;
@@ -97,6 +211,9 @@
     .social-icon {
         scale: 0.5;
     }
+    .all_games {
+        display: inline-block;
+    }
 }
 
 @media screen and (max-width: 550px) {
@@ -105,7 +222,7 @@
         align-items: flex-start;
     }
     .logo {
-        font-size: 18px;
+        font-size: 22px;
         padding-left: 1rem;
         margin-bottom: 0rem;
     }

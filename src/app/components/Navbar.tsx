@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from 'react';
 import "../styles/Navbar.css";
 import { GrGamepad } from "react-icons/gr";
 import Link from "next/link";
@@ -5,22 +8,49 @@ import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from 'react-icons/ai';
 import { TbSquareRoundedLetterR } from 'react-icons/tb';
 
 export default function Navbar() {
+    const [isEnabled, setEnabled] = useState(false);
+    const [animationClass, setAnimationClass] = useState('');
+    
+    const handleMenuToggle = () => {
+        if (!isEnabled) {
+          setAnimationClass('swing-in-top-fwd');
+          setEnabled(true);
+        } else {
+          setAnimationClass('swing-out-top-fwd');
+          setTimeout(() => {
+            setEnabled(false);
+          }, 1000);
+        }
+      };
+
     return (
         <nav className="Navbar-main">
             <Link href='/' className="logo">
-                <GrGamepad className="lg:scale-150 lg:mr-4 lg:mb-3 md:scale-110 md:mr-2 md:mb-1.5 sm:scale-85 sm:mr-1.5 sm:mb-1 "/>
+                <GrGamepad />
                 <a className="gradient_text">Webgames</a>
             </Link>
-            {/* <div className="all_games">All Games</div> */}
+
+            <div className="all_games" onClick={handleMenuToggle}>
+                <button className="all_games_button">All Games</button>
+                {isEnabled && (
+                    <div className={`all_games_links_container ${animationClass}`}>
+                    <p><a href="/tic-tac-toe">Tic Tac Toe</a></p>
+                    <p><a href="/pic-diff">Pic Diff</a></p>
+                    <p><a href="/rock-paper-scissors">Rock Paper Scissors</a></p>
+                    </div>
+                )}
+            </div>
+
+
             <div className="links_container">
                 <Link href="/tic-tac-toe" className="webgame_link">
-                Tic Tac Toe
+                    Tic Tac Toe
                 </Link>
                 <Link href="/pic-diff" className="webgame_link">
-                Pic Diff
+                    Pic Diff
                 </Link>
                 <Link href="/rock-paper-scissors" className="webgame_link">
-                Rock Paper Scissors
+                    Rock Paper Scissors
                 </Link>
             </div>
             <div className="social-icons">
@@ -38,5 +68,6 @@ export default function Navbar() {
                 </Link>
             </div>
         </nav>
-    )
+    );
 }
+
