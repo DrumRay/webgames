@@ -1,10 +1,5 @@
 import "../styles/tic_tac_toe.css"
-
-// проверить можно ли использовать класснейм "who's_next" и добавить туда логику смены картинки
-// в картинки вставить текст
-// поискать svg рестарта и вставить вместо текста + скачать картинку маленького блока с фигмы
-// заменить вообще эти картинки div-ом с background image этого блока и текстом внутри
-// сделать внутренний паддинг детей через div turn-refresh, не изменяя каждый внутренний элемент по отдельности
+import GameField from "../components/GameField"
 
 export default function TicTacToe() {
     return (
@@ -23,59 +18,7 @@ export default function TicTacToe() {
                 </div>
                 <div className="placeholder_button"> ... </div>
             </div>
-            <div className="game_field">
-                <div className="row">
-                    <div className="field_button">
-                            <button id="1st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                        <div className="field_button">
-                            <button id="2st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                        <div className="field_button">
-                            <button id="3st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                </div>
-                <div className="row">
-                        <div className="field_button">
-                            <button id="4st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                    </div>
-                    <div className="field_button">
-                            <button id="5st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                        <div className="field_button">
-                            <button id="6st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                </div>
-                <div className="row">
-                <div className="field_button">
-                            <button id="7st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                        <div className="field_button">
-                            <button id="8st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                        <div className="field_button">
-                            <button id="9st_field">
-                                <img src="/assets/empty_field.png"/>
-                            </button>
-                        </div>
-                </div>
-            </div>
+            <GameField/>
         </div>
     )
 }
