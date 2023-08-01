@@ -1,7 +1,20 @@
+.ttt-general {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+}
+
 .turn-refresh {
     display: flex;
     justify-content: center; 
     align-items: center; 
+}
+
+@media screen and (max-width: 550px) {
+    .turn-refresh {
+        flex-direction: column;
+    }
 }
 
 
