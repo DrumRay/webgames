@@ -4,8 +4,20 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import { Nunito } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
 
 export const metadata: Metadata = {
   title: 'Webgames',
@@ -18,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${nunito.variable} ${inter.variable}`}>
+      <body>
         <Navbar/>
         {children}
         <Footer/>
