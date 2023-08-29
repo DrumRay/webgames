@@ -12,6 +12,7 @@ interface FieldData {
 
 export default function GameField() {
   const [xTurn, setXTurn] = useState(true);
+  const [turn, setTurn] = useState("X");
   const defaultFieldData = {
     0: "",
     1: "",
@@ -25,23 +26,32 @@ export default function GameField() {
   };
 
   const [fieldData, setFieldData] = useState(defaultFieldData);
+  const [clickedCells, setClickedCells] = useState([]);
 
   const resetFieldData = () => {
     setFieldData(defaultFieldData);
-    setXTurn(true)
+    setXTurn(true);
+    setTurn("X");
+    setClickedCells([]);
   };
 
   const updateFieldData = (i: number) => {
+    if (clickedCells.includes(i)) {
+      return; 
+    }
+  
     const newValue = xTurn ? "X" : "O";
     setFieldData({ ...fieldData, [i]: newValue });
     setXTurn(!xTurn);
+    setTurn(newValue);
+    setClickedCells([...clickedCells, i]); 
   };
 
   return (
     <div>
       <div className="top_field">
         <div className="turn-refresh py-4">
-        <NextPlayerButton />
+        <NextPlayerButton turn={turn}/>
         <PlayerOrCompButton/>
         <RefreshButton onClick={resetFieldData}/>
         </div>
