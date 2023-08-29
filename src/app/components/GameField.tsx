@@ -26,7 +26,7 @@ export default function GameField() {
   };
 
   const [fieldData, setFieldData] = useState(defaultFieldData);
-  const [clickedCells, setClickedCells] = useState([]);
+  const [clickedCells, setClickedCells] = useState<number[]>([]);
 
   const resetFieldData = () => {
     setFieldData(defaultFieldData);
