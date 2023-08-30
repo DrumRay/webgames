@@ -13,6 +13,7 @@ interface FieldData {
 export default function GameField() {
   const [xTurn, setXTurn] = useState(true);
   const [turn, setTurn] = useState("X");
+  const [winner, setWinner] = useState<string | null>(null);
   const defaultFieldData = {
     0: "",
     1: "",
@@ -24,6 +25,12 @@ export default function GameField() {
     7: "",
     8: "",
   };
+
+  const winningCombos = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+    [0, 4, 8], [2, 4, 6]           
+  ];
 
   const [fieldData, setFieldData] = useState<{ [key: number]: string }>(defaultFieldData);
   const [clickedCells, setClickedCells] = useState<number[]>([]);
@@ -37,15 +44,35 @@ export default function GameField() {
 
   const updateFieldData = (i: number) => {
     if (clickedCells.includes(i)) {
-      return; 
+      return;
     }
   
     const newValue = xTurn ? "X" : "O";
-    setFieldData({ ...fieldData, [i]: newValue });
+    const newFieldData = { ...fieldData, [i]: newValue };
+
+    const checkWinner = (turn: string) => {
+      for (const combo of winningCombos) {
+        const [a, b, c] = combo;
+        if (newFieldData[a] === turn && newFieldData[b] === turn && newFieldData[c] === turn) {
+          return true;
+          
+        }
+      }
+      return false; 
+    };
+    
+    setFieldData(newFieldData);
     setXTurn(!xTurn);
     setTurn(newValue);
-    setClickedCells([...clickedCells, i]); 
+    setClickedCells([...clickedCells, i]);
+
+    if (checkWinner(newValue)) {
+      setWinner(newValue); 
+      return;
+    }
+
   };
+  
 
   return (
     <div>
@@ -64,6 +91,14 @@ export default function GameField() {
         </FieldButton>
       ))}
       </div>
+
+      {winner && (
+      <div className="winner-modal">
+        Игрок {winner} победил!
+        <button onClick={resetFieldData}>Начать новую игру</button>
+      </div>
+    )}
+    
     </div>
   );
 }
