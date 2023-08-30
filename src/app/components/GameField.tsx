@@ -25,7 +25,7 @@ export default function GameField() {
     8: "",
   };
 
-  const [fieldData, setFieldData] = useState(defaultFieldData);
+  const [fieldData, setFieldData] = useState<{ [key: number]: string }>(defaultFieldData);
   const [clickedCells, setClickedCells] = useState<number[]>([]);
 
   const resetFieldData = () => {
