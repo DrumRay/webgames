@@ -29,13 +29,13 @@
 
 @media screen and (max-width: 400px) {
     .game_field {
-        scale: 0.8;
+        scale: 0.7;
     }
 }
 
 @media screen and (max-width: 300px) {
     .game_field {
-        scale: 0.7;
+        scale: 0.65;
     }
 }
 
