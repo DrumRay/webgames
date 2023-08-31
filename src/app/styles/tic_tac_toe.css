@@ -11,13 +11,33 @@
     align-items: center; 
 }
 
+.game_field {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
 
 @media screen and (max-width: 550px) {
     .turn-refresh {
         flex-direction: column;
     }
+    .game_field {
+        scale: 0.9;
+    }
 }
 
+@media screen and (max-width: 400px) {
+    .game_field {
+        scale: 0.8;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    .game_field {
+        scale: 0.7;
+    }
+}
 
 
 

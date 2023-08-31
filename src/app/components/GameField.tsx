@@ -1,6 +1,5 @@
 "use client"
 
-import "../styles/GameField.css"
 import "../styles/tic_tac_toe.css"
 import { FieldButton } from "../containers/Buttons"
 import { useState } from "react"
