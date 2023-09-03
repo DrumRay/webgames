@@ -8,7 +8,7 @@ export default function Home() {
       <div className='game_preview_container'>
         <Link href="/tic-tac-toe">
         <div className='game-card'>
-          <Image src='/assets/game_preview_placeholder.png' alt="game_preview_pic" width='251' height='314'/>
+          <Image src='/assets/tic_tac_toe_preview.png' alt="game_preview_pic" width='269' height='314'/>
           <a>Tic Tac Toe</a>
         </div>
         </Link>
