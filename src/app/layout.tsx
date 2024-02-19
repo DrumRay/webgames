@@ -20,8 +20,8 @@ const nunito = Nunito({
 
 
 export const metadata: Metadata = {
-  title: 'Webgames',
-  description: '...',
+  title: 'Webgames - игры от Анатолия Бакума',
+  description: 'Крестики-нолики, камень-ножницы-бумага, найди отличия - различные Браузерные игры от Анатолий Бакума',
 }
 
 export default function RootLayout({
