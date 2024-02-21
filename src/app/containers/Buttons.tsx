@@ -12,6 +12,10 @@ interface FieldButtonProps {
     onClick: () => void;
   }
 
+  interface Change_game_type_buttonProps {
+    onClick: () => void;
+  }
+
   function FieldButton({ children, onClick }: FieldButtonProps) {
     return (
       <div className="w-[130px] h-[130px] relative bg-white bg-opacity-0 hover:cursor-pointer" onClick={onClick}>
@@ -33,11 +37,11 @@ function NextPlayerButton({ turn }: { turn: string }) {
     )
 };
 
-function PlayerOrCompButton() {
+function Change_game_type_button({ onClick }: Change_game_type_buttonProps) {
     return (
-    <div className="px-2 py-1 hover:cursor-pointer">
+    <div className="px-2 py-1 hover:cursor-pointer" onClick={onClick}>
         <div className="w-[170px] h-[43px] p-[9px] bg-gradient-to-b from-purple-400 to-zinc-600 rounded-[7px] border-4 border-black justify-center items-center gap-2.5 inline-flex">
-            <div className="w-[170px] h-[18px] text-center text-black text-[15px] font-semibold">Player Vs Player</div>
+            <div className="w-[170px] h-[18px] text-center text-black text-[15px] font-semibold">Change game type</div>
         </div>
     </div>
     )
@@ -53,4 +57,4 @@ function RefreshButton({ onClick }: RefreshButtonProps) {
     )
 };
 
-export {FieldButton, NextPlayerButton, PlayerOrCompButton, RefreshButton};
+export {FieldButton, NextPlayerButton, Change_game_type_button, RefreshButton};
