@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import "../styles/tic_tac_toe.css"
+import "../styles/tic_tac_toe.css";
 import "../styles/tic-tac-toe_main.css";
-import {NextPlayerButton, Change_game_type_button, RefreshButton} from "../containers/Buttons"
-import { FieldButton } from "../containers/Buttons"
+import { NextPlayerButton, Change_game_type_button, RefreshButton } from "../containers/Buttons";
+import { FieldButton } from "../containers/Buttons";
 
 interface FieldData {
   [key: number]: string;
@@ -15,6 +15,10 @@ export default function TicTacToe() {
   const [turn, setTurn] = useState("X");
   const [winner, setWinner] = useState<string | null>(null);
   const [draw, setDraw] = useState(false);
+  const [botGame, setBotGame] = useState(false);
+  const [bot, setBot] = useState<"X" | "O">("X");
+  const [player, setPlayer] = useState<"X" | "O">("O");
+
   const defaultFieldData = {
     0: "",
     1: "",
@@ -28,13 +32,18 @@ export default function TicTacToe() {
   };
 
   const winningCombos = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], 
-    [0, 4, 8], [2, 4, 6]           
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
   ];
 
   const [fieldData, setFieldData] = useState<{ [key: number]: string }>(defaultFieldData);
   const [clickedCells, setClickedCells] = useState<number[]>([]);
+  const assignPlayerValues = () => {
+    const randomValue = Math.random() < 0.5 ? "X" : "O";
+    setBot(randomValue);
+    setPlayer(randomValue === "X" ? "O" : "X");
+  };
 
   const resetFieldData = () => {
     setFieldData(defaultFieldData);
@@ -43,13 +52,16 @@ export default function TicTacToe() {
     setClickedCells([]);
     setWinner(null);
     setDraw(false);
+    if (botGame) {
+      assignPlayerValues();
+    }
   };
 
   const updateFieldData = (i: number) => {
     if (clickedCells.includes(i)) {
       return;
     }
-  
+
     const newValue = xTurn ? "X" : "O";
     const whichTurn = xTurn ? "O" : "X";
     const newFieldData = { ...fieldData, [i]: newValue };
@@ -59,37 +71,121 @@ export default function TicTacToe() {
         const [a, b, c] = combo;
         if (newFieldData[a] === turn && newFieldData[b] === turn && newFieldData[c] === turn) {
           return true;
-          
         }
       }
-      return false; 
+      return false;
     };
-    
+
     setFieldData(newFieldData);
     setXTurn(!xTurn);
     setTurn(whichTurn);
     setClickedCells([...clickedCells, i]);
 
-
     if (checkWinner(newValue)) {
-      setWinner(newValue); 
+      setWinner(newValue);
       return;
     } else if (clickedCells.length === 8 && !winner) {
       setDraw(true);
     }
 
+    // Если игра с ботом и сейчас ход бота, вызываем его ход
+    if (botGame && turn === bot) {
+      const botIndex = botMove(newFieldData, bot);
+      handleBotMove(botIndex);
+    }
   };
 
-    const [showModal, setShowModal] = useState(true);
+  // Функция для обработки хода бота
+  const handleBotMove = (index: number) => {
+    // Меняем состояние поля
+    const newFieldData = { ...fieldData, [index]: turn };
+    setFieldData(newFieldData);
+
+    // Проверяем победителя и ничью
+    const newClickedCells = [...clickedCells, index];
+    setClickedCells(newClickedCells);
+
+    if (checkWinner(turn, newFieldData) || (newClickedCells.length === 8 && !checkWinner(turn, newFieldData))) {
+      setWinner(turn);
+    }
+
+    setTurn(xTurn ? "O" : "X");
+    setXTurn(!xTurn);
+  };
+
+  // Функция для проверки победителя
+  const checkWinner = (turn: string, fieldData: FieldData) => {
+    for (const combo of winningCombos) {
+      const [a, b, c] = combo;
+      if (fieldData[a] === turn && fieldData[b] === turn && fieldData[c] === turn) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const [showModal, setShowModal] = useState(true);
+
+  useEffect(() => {
+    setShowModal(true);
+  }, []);
+
+  const closeAndStartGame = () => {
+    if (botGame) {
+      assignPlayerValues();
+    }
+    setShowModal(false);
+    resetFieldData();
+  };
+
+  const botMove = (fieldData, botSymbol) => {
+    const emptyCells = Object.keys(fieldData).filter((key) => !fieldData[key]);
+    const playerSymbol = botSymbol === "X" ? "O" : "X";
   
-    useEffect(() => {
-      setShowModal(true);
-    }, []);
-  
-    const closeAndStartGame = () => {
-      setShowModal(false);
-      resetFieldData();
+    // Функция для проверки выигрышной комбинации
+    const checkCombo = (combo, symbol) => {
+      let count = 0;
+      combo.forEach((index) => {
+        if (fieldData[index] === symbol) count++;
+      });
+      return count === 2;
     };
+  
+    // Первый ход: центральная ячейка для X, случайная для O
+    if (emptyCells.length === 9) {
+      return botSymbol === "X" ? 4 : emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    }
+  
+    // Проверяем, можем ли выиграть в этом ходу
+    for (let i = 0; i < winningCombos.length; i++) {
+      const combo = winningCombos[i];
+      if (checkCombo(combo, botSymbol)) {
+        const emptyCell = combo.find((index) => !fieldData[index]);
+        if (emptyCell !== undefined) return emptyCell;
+      }
+    }
+  
+    // Проверяем, может ли игрок выиграть следующим ходом
+    for (let i = 0; i < winningCombos.length; i++) {
+      const combo = winningCombos[i];
+      if (checkCombo(combo, playerSymbol)) {
+        const emptyCell = combo.find((index) => !fieldData[index]);
+        if (emptyCell !== undefined) return emptyCell;
+      }
+    }
+  
+    // Проверяем, можем ли активировать клетку, чтобы улучшить свою позицию
+    for (let i = 0; i < winningCombos.length; i++) {
+      const combo = winningCombos[i];
+      const botCells = combo.filter((index) => fieldData[index] === botSymbol);
+      const emptyCell = combo.find((index) => !fieldData[index] && botCells.length === 1);
+      if (emptyCell !== undefined) return emptyCell;
+    }
+  
+    // Если все остальные проверки неудачны, ставим в случайную незанятую клетку
+    return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  };
+   
   
     return (
         <div className="ttt-general">
@@ -101,7 +197,10 @@ export default function TicTacToe() {
                     onClick={closeAndStartGame}>
                     Локальная игра
                     </button>
-                    <button>
+                    <button onClick={() => {
+                        setBotGame(true);
+                        closeAndStartGame();
+                      }}>
                     Игра с ботом
                     </button>
                     <button>
