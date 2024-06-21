@@ -13,11 +13,12 @@ interface FieldData {
 export default function TicTacToe() {
   const [xTurn, setXTurn] = useState(true);
   const [turn, setTurn] = useState("X");
+  const [xGame, setXGame] = useState(false)
   const [winner, setWinner] = useState<string | null>(null);
   const [draw, setDraw] = useState(false);
   const [botGame, setBotGame] = useState(false);
-  const [bot, setBot] = useState<"X" | "O">("X");
-  const [player, setPlayer] = useState<"X" | "O">("O");
+  const [bot, setBot] = useState<"X" | "O">("O");
+  const [player, setPlayer] = useState<"X" | "O">("X");
 
   const defaultFieldData = {
     0: "",
@@ -40,19 +41,15 @@ export default function TicTacToe() {
   const [fieldData, setFieldData] = useState<{ [key: number]: string }>(defaultFieldData);
   const [clickedCells, setClickedCells] = useState<number[]>([]);
   
+  
   const logPlayerValues = () => {
     console.log(`Bot: ${bot}, Player: ${player}`);
 };
+
+useEffect(() => {
+  console.log(`Bot: ${bot}, Player: ${player}`);
+}, [bot, player]);
   
-const assignPlayerValues = () => {
-  const randomValue = Math.random() < 0.5 ? "X" : "O";
-  setBot(randomValue);
-  setPlayer(randomValue === "X" ? "O" : "X");
-
-  // Логирование значений после их установки
-  console.log(`Assigned values - Bot: ${randomValue}, Player: ${randomValue === "X" ? "O" : "X"}`);
-};
-
   const resetFieldData = () => {
     setFieldData(defaultFieldData);
     setXTurn(true);
@@ -60,18 +57,31 @@ const assignPlayerValues = () => {
     setClickedCells([]);
     setWinner(null);
     setDraw(false);
-  
+    setXGame(!xGame);
+    console.log(xGame)
+
     if (botGame) {
-      assignPlayerValues();
-      logPlayerValues();
+      if (xGame) {
+        setBot("O");
+        setPlayer("X");
+        console.log('поменял игрока на Х')
+        
+
+      } else if (!xGame) {
+        setBot("X");
+        setPlayer("O");
+        console.log('поменял бота на Х')
+
+        }
+        logPlayerValues();
+        updateFieldData;
+      //const randomValue = Math.random() < 0.5 ? "X" : "O";
+      //setBot(randomValue);
+      //setPlayer(randomValue === "X" ? "O" : "X");
+      
   
       // Если бот ходит первым
-      if (bot === "X") {
-        const botIndex = botMove(defaultFieldData, "X");
-        setTimeout(() => handleBotMove(botIndex, defaultFieldData), 200);
-        setXTurn(false); // Бот сделал ход, теперь очередь игрока "O"
-        setTurn("O");
-      }
+
     }
   };
   
@@ -94,25 +104,31 @@ const assignPlayerValues = () => {
       setWinner(newValue);
     } else if (clickedCells.length === 8) {
       setDraw(true);
-    } else if (botGame && whichTurn === bot) {
-      setTimeout(() => {
-        const botIndex = botMove(newFieldData, bot);
-        handleBotMove(botIndex, newFieldData);
-      }, 500); // Добавляем задержку для имитации "размышлений" бота
     }
   };
   
+  useEffect(() => {
+    if (botGame && turn === bot) {
+      setTimeout(() => {
+        const botIndex = botMove(fieldData, bot);
+        handleBotMove(botIndex, fieldData);
+      }, 500); // Добавляем задержку для имитации "размышлений" бота
+    }
+  }, [turn, bot, botGame, fieldData]);
   
+
   const handleBotMove = (index: number, currentFieldData: FieldData) => {
-    if (winner || draw) return;
-  
+    if (!botGame || winner || draw) return;
+
+    console.log(`Bot moves to cell: ${index} Assigned values - Bot: ${bot}, Player: ${player}`);
+
     const newFieldData = { ...currentFieldData, [index]: bot };
     setFieldData(newFieldData);
     setClickedCells(prevClickedCells => [...prevClickedCells, index]);
-  
+
     if (checkWinner(bot, newFieldData)) {
       setWinner(bot);
-    } else if (clickedCells.length + 1 === 9) { // Учитываем текущий ход бота
+    } else if (clickedCells.length >= 7) {
       setDraw(true);
     } else {
       setTurn(player);
@@ -139,16 +155,13 @@ const assignPlayerValues = () => {
   }, []);
 
   const closeAndStartGame = () => {
-    if (botGame) {
-      assignPlayerValues();
-    }
     setShowModal(false);
     resetFieldData();
   };
 
-  const botMove = (fieldData: FieldData, botSymbol: string): number => {
+  const botMove = (fieldData: FieldData, bot: string): number => {
     const emptyCells = Object.keys(fieldData).filter((key) => !fieldData[parseInt(key)]).map(Number);
-    const playerSymbol = botSymbol === "X" ? "O" : "X";
+    const player = bot === "X" ? "O" : "X";
   
     // Функция для проверки выигрышной комбинации
     const checkCombo = (combo: number[], symbol: string) => {
@@ -161,13 +174,13 @@ const assignPlayerValues = () => {
   
     // Первый ход: центральная ячейка для X, случайная для O
     if (emptyCells.length === 9) {
-      return botSymbol === "X" ? 4 : emptyCells[Math.floor(Math.random() * emptyCells.length)];
+      return bot === "X" ? 4 : emptyCells[Math.floor(Math.random() * emptyCells.length)];
     }
   
     // Проверяем, можем ли выиграть в этом ходу
     for (let i = 0; i < winningCombos.length; i++) {
       const combo = winningCombos[i];
-      if (checkCombo(combo, botSymbol)) {
+      if (checkCombo(combo, bot)) {
         const emptyCell = combo.find((index) => !fieldData[index]);
         if (emptyCell !== undefined) return emptyCell;
       }
@@ -176,7 +189,7 @@ const assignPlayerValues = () => {
     // Проверяем, может ли игрок выиграть следующим ходом
     for (let i = 0; i < winningCombos.length; i++) {
       const combo = winningCombos[i];
-      if (checkCombo(combo, playerSymbol)) {
+      if (checkCombo(combo, player)) {
         const emptyCell = combo.find((index) => !fieldData[index]);
         if (emptyCell !== undefined) return emptyCell;
       }
@@ -185,7 +198,7 @@ const assignPlayerValues = () => {
     // Проверяем, можем ли активировать клетку, чтобы улучшить свою позицию
     for (let i = 0; i < winningCombos.length; i++) {
       const combo = winningCombos[i];
-      const botCells = combo.filter((index) => fieldData[index] === botSymbol);
+      const botCells = combo.filter((index) => fieldData[index] === bot);
       const emptyCell = combo.find((index) => !fieldData[index] && botCells.length === 1);
       if (emptyCell !== undefined) return emptyCell;
     }
@@ -201,14 +214,16 @@ const assignPlayerValues = () => {
             <div className="modal-content_select_game_type">
             <p>Выберите режим игры</p>
             <div className="modal-content_select_game_type_buttons">
-                    <button
-                    onClick={closeAndStartGame}>
+            <button onClick={() => {
+                          closeAndStartGame();
+                          setBotGame(false); // Устанавливаем botGame в false при клике на кнопку "Локальная игра"
+                      }}>
                     Локальная игра
                     </button>
                     <button onClick={() => {
-                        setBotGame(true);
                         closeAndStartGame();
-                      }}>
+                        setBotGame(true);
+                        }}>
                     Игра с ботом
                     </button>
                     <button>
