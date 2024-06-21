@@ -138,12 +138,12 @@ export default function TicTacToe() {
     resetFieldData();
   };
 
-  const botMove = (fieldData, botSymbol) => {
-    const emptyCells = Object.keys(fieldData).filter((key) => !fieldData[key]);
+  const botMove = (fieldData: FieldData, botSymbol: string): number => {
+    const emptyCells = Object.keys(fieldData).filter((key) => !fieldData[parseInt(key)]).map(Number);
     const playerSymbol = botSymbol === "X" ? "O" : "X";
   
     // Функция для проверки выигрышной комбинации
-    const checkCombo = (combo, symbol) => {
+    const checkCombo = (combo: number[], symbol: string) => {
       let count = 0;
       combo.forEach((index) => {
         if (fieldData[index] === symbol) count++;
