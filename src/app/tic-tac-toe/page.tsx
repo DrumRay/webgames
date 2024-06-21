@@ -39,11 +39,19 @@ export default function TicTacToe() {
 
   const [fieldData, setFieldData] = useState<{ [key: number]: string }>(defaultFieldData);
   const [clickedCells, setClickedCells] = useState<number[]>([]);
-  const assignPlayerValues = () => {
-    const randomValue = Math.random() < 0.5 ? "X" : "O";
-    setBot(randomValue);
-    setPlayer(randomValue === "X" ? "O" : "X");
-  };
+  
+  const logPlayerValues = () => {
+    console.log(`Bot: ${bot}, Player: ${player}`);
+};
+  
+const assignPlayerValues = () => {
+  const randomValue = Math.random() < 0.5 ? "X" : "O";
+  setBot(randomValue);
+  setPlayer(randomValue === "X" ? "O" : "X");
+
+  // Логирование значений после их установки
+  console.log(`Assigned values - Bot: ${randomValue}, Player: ${randomValue === "X" ? "O" : "X"}`);
+};
 
   const resetFieldData = () => {
     setFieldData(defaultFieldData);
@@ -52,66 +60,66 @@ export default function TicTacToe() {
     setClickedCells([]);
     setWinner(null);
     setDraw(false);
+  
     if (botGame) {
       assignPlayerValues();
+      logPlayerValues();
+  
+      // Если бот ходит первым
+      if (bot === "X") {
+        const botIndex = botMove(defaultFieldData, "X");
+        setTimeout(() => handleBotMove(botIndex, defaultFieldData), 200);
+        setXTurn(false); // Бот сделал ход, теперь очередь игрока "O"
+        setTurn("O");
+      }
     }
   };
-
+  
+  
   const updateFieldData = (i: number) => {
-    if (clickedCells.includes(i)) {
+    if (clickedCells.includes(i) || winner || draw) {
       return;
     }
-
+  
     const newValue = xTurn ? "X" : "O";
     const whichTurn = xTurn ? "O" : "X";
     const newFieldData = { ...fieldData, [i]: newValue };
-
-    const checkWinner = (turn: string) => {
-      for (const combo of winningCombos) {
-        const [a, b, c] = combo;
-        if (newFieldData[a] === turn && newFieldData[b] === turn && newFieldData[c] === turn) {
-          return true;
-        }
-      }
-      return false;
-    };
-
+  
     setFieldData(newFieldData);
     setXTurn(!xTurn);
     setTurn(whichTurn);
-    setClickedCells([...clickedCells, i]);
-
-    if (checkWinner(newValue)) {
+    setClickedCells(prevClickedCells => [...prevClickedCells, i]);
+  
+    if (checkWinner(newValue, newFieldData)) {
       setWinner(newValue);
-      return;
-    } else if (clickedCells.length === 8 && !winner) {
+    } else if (clickedCells.length === 8) {
       setDraw(true);
-    }
-
-    // Если игра с ботом и сейчас ход бота, вызываем его ход
-    if (botGame && turn === bot) {
-      const botIndex = botMove(newFieldData, bot);
-      handleBotMove(botIndex);
+    } else if (botGame && whichTurn === bot) {
+      setTimeout(() => {
+        const botIndex = botMove(newFieldData, bot);
+        handleBotMove(botIndex, newFieldData);
+      }, 500); // Добавляем задержку для имитации "размышлений" бота
     }
   };
-
-  // Функция для обработки хода бота
-  const handleBotMove = (index: number) => {
-    // Меняем состояние поля
-    const newFieldData = { ...fieldData, [index]: turn };
+  
+  
+  const handleBotMove = (index: number, currentFieldData: FieldData) => {
+    if (winner || draw) return;
+  
+    const newFieldData = { ...currentFieldData, [index]: bot };
     setFieldData(newFieldData);
-
-    // Проверяем победителя и ничью
-    const newClickedCells = [...clickedCells, index];
-    setClickedCells(newClickedCells);
-
-    if (checkWinner(turn, newFieldData) || (newClickedCells.length === 8 && !checkWinner(turn, newFieldData))) {
-      setWinner(turn);
+    setClickedCells(prevClickedCells => [...prevClickedCells, index]);
+  
+    if (checkWinner(bot, newFieldData)) {
+      setWinner(bot);
+    } else if (clickedCells.length + 1 === 9) { // Учитываем текущий ход бота
+      setDraw(true);
+    } else {
+      setTurn(player);
+      setXTurn(bot === "O");
     }
-
-    setTurn(xTurn ? "O" : "X");
-    setXTurn(!xTurn);
   };
+  
 
   // Функция для проверки победителя
   const checkWinner = (turn: string, fieldData: FieldData) => {
