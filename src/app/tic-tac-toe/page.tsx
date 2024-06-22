@@ -128,7 +128,7 @@ useEffect(() => {
 
     if (checkWinner(bot, newFieldData)) {
       setWinner(bot);
-    } else if (clickedCells.length >= 7) {
+    } else if (clickedCells.length >= 8) {
       setDraw(true);
     } else {
       setTurn(player);
